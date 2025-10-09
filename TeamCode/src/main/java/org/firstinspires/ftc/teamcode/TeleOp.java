@@ -42,6 +42,8 @@ public class TeleOp extends CommandOpMode {
     public static double bucketStart = 0.636;
     public static double outtakeResetPower = 0.4;
 
+
+
     States.Global currentState = States.Global.home;
 
     GamepadEx driver, tools;
@@ -50,6 +52,7 @@ public class TeleOp extends CommandOpMode {
     VisionSubsystem vision;
     @Override
     public void initialize() {
+        FlywheelSubsystem outtake = new FlywheelSubsystem(hardwareMap, telemetry);
         // data sent to telemetry shows up on dashboard and driverGamepad station
         // data sent to the telemetry packet only shows up on the dashboard
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -92,6 +95,12 @@ public class TeleOp extends CommandOpMode {
                 swapState(States.Global.home)
         );
 */
+
+        new GamepadButton(tools, GamepadKeys.Button.Y).toggleWhenPressed(
+                new InstantCommand(() -> outtake.setPower(1.0), outtake),
+                new InstantCommand(() -> outtake.setPower(0.0), outtake)
+        );
+
         // IMU reset
         new GamepadButton(driver, GamepadKeys.Button.X).whenPressed(
                 new InstantCommand(() -> drive.drive.pinpoint.recalibrateIMU())
@@ -134,7 +143,6 @@ public class TeleOp extends CommandOpMode {
 
         // toggle outtake system
 
-
         // TODO transfer system
 
         schedule(new RunCommand(() -> {
@@ -150,11 +158,13 @@ public class TeleOp extends CommandOpMode {
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }));
         schedule(driveCommand);
+        schedule(new RunCommand(() ->
+                outtake.setPower(tools.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)), outtake));
+
+
     }
 
     public InstantCommand swapState(States.Global state) {
         return new InstantCommand(() -> currentState = state);
     }
-
-
 }
