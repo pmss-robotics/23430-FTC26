@@ -27,33 +27,26 @@ import org.firstinspires.ftc.teamcode.drive.PinpointDrive;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.firstinspires.ftc.teamcode.util.States;
 
+//hello
 @Config
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "TeleOp")
-public class TeleOp extends CommandOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "DriveOP", group = "TeleOp")
+public class DriveOp extends CommandOpMode {
     // probably need to change later.
     public static double servoIncrement = 7;
-    public static double intakeSlideIncrement = 2;
     public static double servoSpeed = 1;
-    public static double driveSpeed = 1;
-    public static double fast = 1;
-    public static double slow = 0.5;
-    public static double rotationSpeed = 1;
+    public static double driveSpeed = 0.2;
+    public static double rotationSpeed = 0.2;
     public static double wristStart = 0.5;
     public static double bucketStart = 0.636;
-    public static double outtakeResetPower = 0.4;
-
-
-
     States.Global currentState = States.Global.home;
 
     GamepadEx driver, tools;
     DriveSubsystem drive;
-
-    VisionSubsystem vision;
+    /*    OuttakeSlidesSubsystem outtakeSlides;
+        IntakeSlidesSubsystem intakeSlides;
+        VisionSubsystem vision; */
     @Override
     public void initialize() {
-        FlywheelSubsystem outtake = new FlywheelSubsystem(hardwareMap, telemetry);
-        BeltSubsystem belt = new BeltSubsystem(hardwareMap, telemetry);
         // data sent to telemetry shows up on dashboard and driverGamepad station
         // data sent to the telemetry packet only shows up on the dashboard
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -69,24 +62,29 @@ public class TeleOp extends CommandOpMode {
         // disturbing the structure of the CommandOpMode. The aim is to define bindings in this
         // initialize() method through Commands and these will be looped and acted in the (hidden)
         // run() loop.
-        driveSpeed = fast;
+
         // macros to bring thing up and down
         // intake extenstion
         // outtake macro positions
         DriveCommand driveCommand = new DriveCommand(drive,
                 () -> -driver.getLeftX()*driveSpeed,
                 () -> driver.getLeftY()*driveSpeed,
-                () -> -driver.getRightX()*driveSpeed,
-                true);
+                () -> -driver.getRightX()*rotationSpeed,
+                false);
 
-        /*      try {
+//        outtakeSlides = new OuttakeSlidesSubsystem(hardwareMap, telemetry);
+//        outtakeSlides.setDefaultCommand(new RunCommand(outtakeSlides::holdPosition, outtakeSlides));
+
+//        intakeSlides = new IntakeSlidesSubsystem(hardwareMap, telemetry);
+/*      try {
             vision = new VisionSubsystem(hardwareMap, telemetry);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 */
-        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, telemetry);
+//        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, telemetry);
 
+        //OuttakeSubsystem outtake = new OuttakeSubsystem(hardwareMap, telemetry);
 
         // reset everything, probably unnecessary
 /*      SequentialCommandGroup returnHome = new SequentialCommandGroup(
@@ -96,31 +94,8 @@ public class TeleOp extends CommandOpMode {
                 swapState(States.Global.home)
         );
 */
-
-        // IMU reset
-        new GamepadButton(driver, GamepadKeys.Button.X).whenPressed(
-                new InstantCommand(() -> drive.drive.pinpoint.recalibrateIMU())
-        );
-
-        //slower driving
-        new GamepadButton(driver, GamepadKeys.Button.B).toggleWhenPressed(
-                () -> driveSpeed = slow,
-                () -> driveSpeed = fast
-        );
-
         // intake rotation
-        new GamepadButton(tools, GamepadKeys.Button.Y).toggleWhenPressed(
-                new InstantCommand(() -> outtake.setPower(1.0), outtake),
-                new InstantCommand(() -> outtake.setPower(0.0), outtake)
-        );
-
-        //DOES NOT WORK
-        new GamepadButton(tools, GamepadKeys.Button.X).toggleWhenPressed(
-                new InstantCommand(() -> belt.setPower(1.0), belt),
-                new InstantCommand(() -> belt.setPower(0.0), belt)
-        );
-
-        new GamepadButton(tools, GamepadKeys.Button.LEFT_BUMPER)
+/*        new GamepadButton(tools, GamepadKeys.Button.LEFT_BUMPER)
                 .whileHeld(new InstantCommand(
                         () -> intake.incrementPosition(-servoIncrement),
                         intake
@@ -137,19 +112,29 @@ public class TeleOp extends CommandOpMode {
                 new InstantCommand(() -> intake.setPower(0.5), intake)
         );
         new GamepadButton(tools, GamepadKeys.Button.B).toggleWhenPressed(
-                new InstantCommand(() -> intake.setPower(1-servoSpeed), intake),
+                new InstantCommand(() -> intake.setPower(0.5-servoSpeed), intake),
                 new InstantCommand(() -> intake.setPower(0.5), intake)
         );
 
         // toggle intake slides
-
-
-
-
-
+        new GamepadButton(tools, GamepadKeys.Button.X).whenPressed(
+                new InstantCommand(() -> intakeSlides.toggleIntakeSlidesState())
+        );
 
         // toggle outtake system
-
+        new GamepadButton(tools, GamepadKeys.Button.Y).whenPressed(
+                new ConditionalCommand(
+                        new InstantCommand(() -> outtakeSlides.toggleState()),
+                        new SequentialCommandGroup(
+                                //new InstantCommand(() -> outtake.setWristState(States.Outtake.bucket)),
+                                new WaitCommand(OuttakeSubsystem.dropTime),
+                                //new InstantCommand(() -> outtake.toggleWristState()),
+                                new InstantCommand(() -> outtakeSlides.toggleState())
+                        ),
+                        () -> outtakeSlides.getCurrentOutExState() == States.OuttakeExtension.home
+                )
+        );
+*/
         // TODO transfer system
 
         schedule(new RunCommand(() -> {
@@ -165,13 +150,11 @@ public class TeleOp extends CommandOpMode {
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }));
         schedule(driveCommand);
-        schedule(new RunCommand(() ->
-                outtake.setPower(tools.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)), outtake));
-
-
     }
 
     public InstantCommand swapState(States.Global state) {
         return new InstantCommand(() -> currentState = state);
     }
+
+
 }
