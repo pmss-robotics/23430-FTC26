@@ -6,16 +6,22 @@ import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.Subsystem;
 
+import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+
+import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Use this to wrap RR trajectories into commands
+ */
 public class ActionCommand implements Command {
     private final Action action;
-    private final Set<Subsystem> requirements;
+    private final Set<Subsystem> requirements = new HashSet<>();
     private boolean finished = false;
 
-    public ActionCommand(Action action, Set<Subsystem> requirements) {
+    public ActionCommand(DriveSubsystem drive, Action action) {
         this.action = action;
-        this.requirements = requirements;
+        requirements.add(drive);
     }
 
     @Override
@@ -36,4 +42,3 @@ public class ActionCommand implements Command {
         return finished;
     }
 }
-
