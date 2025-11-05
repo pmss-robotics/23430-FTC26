@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.ActionCommand;
-import org.firstinspires.ftc.teamcode.drive.PinpointDrive;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
 @Config
@@ -25,18 +25,19 @@ public class Auto extends CommandOpMode {
 
         Pose2d start = new Pose2d(0,0,0);
 
-        DriveSubsystem drive = new DriveSubsystem(new PinpointDrive(hardwareMap, start), telemetry);
+        DriveSubsystem drive = new DriveSubsystem(new MecanumDrive(hardwareMap, start), telemetry);
 
         // set with your own target poses and headings.
         Pose2d end = new Pose2d(0,0,0);
-        Action path1 = drive.actionBuilder(new Pose2d(0,0,0))
-                .splineTo(end.position, end.heading)
+        Action square = drive.actionBuilder(new Pose2d(0,0,0))
+                .lineToX(24)
+                .turn(Math.toRadians(90))
                 // you can add more splines here instead of creating a path2,3,4,etc.
                 // make a new distinct path when you need to
                 .build();
 
         SequentialCommandGroup routine = new SequentialCommandGroup(
-                new ActionCommand(drive, path1)
+                new ActionCommand(drive, square)
         );
         schedule(routine);
     }

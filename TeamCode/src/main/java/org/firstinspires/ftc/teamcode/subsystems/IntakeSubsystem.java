@@ -1,17 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import android.bluetooth.le.ScanSettings;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.arcrobotics.ftclib.hardware.SimpleServo;
-import com.arcrobotics.ftclib.util.InterpLUT;
 import com.arcrobotics.ftclib.util.MathUtils;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.Range;
 
@@ -19,7 +13,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.States;
 
 import java.util.function.DoubleSupplier;
-import java.util.Objects;
 
 // https://docs.ftclib.org/ftclib/command-base/command-system/subsystems
 @Config

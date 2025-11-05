@@ -10,7 +10,7 @@ import com.arcrobotics.ftclib.command.RunCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.drive.Drawing;
-import org.firstinspires.ftc.teamcode.drive.PinpointDrive;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 
 
@@ -20,7 +20,7 @@ public class Empty_Autonomous extends CommandOpMode {
     @Override
     public void initialize() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        DriveSubsystem drive = new DriveSubsystem(new PinpointDrive(hardwareMap, new Pose2d(0,0,0)), telemetry);
+        DriveSubsystem drive = new DriveSubsystem(new MecanumDrive(hardwareMap, new Pose2d(0,0,0)), telemetry);
 
         // TODO: create wrappers for trajectory following maybe possibly
         // this RunCommand Loop might be useless
