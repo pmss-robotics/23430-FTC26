@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.util;
 
-public class States {
+public class
+
+States {
 
     // global states might be nothing
     public enum Global {
