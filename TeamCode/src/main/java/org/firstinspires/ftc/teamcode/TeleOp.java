@@ -107,24 +107,27 @@ public class TeleOp extends CommandOpMode {
                 () -> driveSpeed = fast
         );
 
-        new GamepadButton(driver, GamepadKeys.Button.X)
-                .whenPressed(() -> {
-                    pusher.moveToTarget();
-                    schedule(
-                            new SequentialCommandGroup(
-                                   new WaitCommand(500),
-                                   new InstantCommand(() -> pusher.moveToHome()))
-                    );
-                });
+        new GamepadButton(driver, GamepadKeys.Button.X).whenPressed(
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> pusher.moveToTarget(), pusher),
+                        new WaitCommand(500),
+                        new InstantCommand(() -> pusher.moveToHome(), pusher)
+                )
+        );
+
+        new GamepadButton(driver, GamepadKeys.Button.Y).toggleWhenPressed(
+                new InstantCommand(() -> outtake.setPower(-0.7), outtake),
+                new InstantCommand(() -> outtake.setPower(0.0), outtake)
+        );
 
         // intake rotation
         new GamepadButton(tools, GamepadKeys.Button.Y).toggleWhenPressed(
-                new InstantCommand(() -> belt.setPower(1.0), belt),
+                new InstantCommand(() -> belt.setPower(0.9), belt),
                 new InstantCommand(() -> belt.setPower(0.0), belt)
         );
 
         new GamepadButton(tools, GamepadKeys.Button.X).toggleWhenPressed(
-                new InstantCommand(() -> outtake.setPower(0.7), outtake),
+                new InstantCommand(() -> outtake.setPower(1.0), outtake),
                 new InstantCommand(() -> outtake.setPower(0.0), outtake)
         );
 

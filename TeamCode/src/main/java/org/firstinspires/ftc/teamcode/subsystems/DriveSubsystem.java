@@ -26,7 +26,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void fieldCentric(double lx, double ly, double rx) {
         // TODO verify if this works the inverse() might not be necessary
         setDrivePowers(new PoseVelocity2d(
-                drive.localizer.getPose().heading.times(new Vector2d(ly, lx)),
+                drive.localizer.getPose().heading.inverse().times(new Vector2d(ly, lx)),
                 rx
         ));
         updatePoseEstimate();
