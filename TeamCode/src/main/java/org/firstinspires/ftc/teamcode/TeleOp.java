@@ -99,7 +99,7 @@ public class TeleOp extends CommandOpMode {
         new GamepadButton(tools, GamepadKeys.Button.X).toggleWhenPressed(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intake.setPower(1.0), intake),
-                        new InstantCommand(() -> belt.setPower(0.5), belt)
+                        new InstantCommand(() -> belt.setPower(1.0), belt)
                 ),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intake.setPower(0.0), intake),
@@ -109,16 +109,8 @@ public class TeleOp extends CommandOpMode {
 
         //turn intake, transfer & flywheel on
         new GamepadButton(tools, GamepadKeys.Button.Y).toggleWhenPressed(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> intake.setPower(1.0), intake),
-                        new InstantCommand(() -> belt.setPower(0.5), belt),
-                        new InstantCommand(() -> outtake.setPower(0.6), outtake)
-                ),
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> intake.setPower(0.0), intake),
-                        new InstantCommand(() -> belt.setPower(0.0), belt),
-                        new InstantCommand(() -> outtake.setPower(0.0), outtake)
-                )
+                new InstantCommand(() -> outtake.setPower(0.6), outtake),
+                new InstantCommand(() -> outtake.setPower(0.0), outtake)
         );
 
         //reverse intake direction
@@ -131,7 +123,7 @@ public class TeleOp extends CommandOpMode {
         new GamepadButton(tools, GamepadKeys.Button.A).toggleWhenPressed(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intake.setPower(-0.7)),
-                        new InstantCommand(() -> belt.setPower(-0.5))
+                        new InstantCommand(() -> belt.setPower(-1.0))
                 ),
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intake.setPower(0.0)),
