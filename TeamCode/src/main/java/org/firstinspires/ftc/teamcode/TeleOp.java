@@ -85,7 +85,8 @@ public class TeleOp extends CommandOpMode {
                 () -> driveSpeed = fast
         );
 
-        //toggle kicker TODO: test!
+        //toggle kicker
+        //TODO: test if toggle works
         new GamepadButton(driver, GamepadKeys.Button.X).toggleWhenPressed(
                 new InstantCommand(() -> kicker.moveToTarget(), kicker),
                 new InstantCommand(() -> kicker.moveToHome(), kicker)

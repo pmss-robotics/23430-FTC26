@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+//TODO: delete old intake subsystem after testing
 public class IntakeSubsystemNew extends SubsystemBase {
     Telemetry telemetry;
     DcMotorEx intakeMotor;
