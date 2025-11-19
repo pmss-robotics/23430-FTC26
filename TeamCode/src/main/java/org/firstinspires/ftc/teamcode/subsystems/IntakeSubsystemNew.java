@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -7,7 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class IntakeSubsystemNew {
+public class IntakeSubsystemNew extends SubsystemBase {
     Telemetry telemetry;
     DcMotorEx intakeMotor;
 
@@ -22,7 +23,8 @@ public class IntakeSubsystemNew {
         intakeMotor.setPower(clippedPower);
     }
 
+    @Override
     public void periodic() {
-        telemetry.addData("Outtake Motor Power", intakeMotor.getPower());
+        telemetry.addData("Intake Motor Power: ", intakeMotor.getPower());
     }
 }
