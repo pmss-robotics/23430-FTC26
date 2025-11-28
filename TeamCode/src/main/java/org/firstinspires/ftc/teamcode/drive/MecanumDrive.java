@@ -44,7 +44,6 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -62,6 +61,7 @@ import java.util.List;
 
 @Config
 public final class MecanumDrive {
+
     public static class Params {
         // IMU orientation
         // TODO: fill in these values based on
@@ -72,28 +72,25 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        public double inPerTick = 0.001992362609995;
-        public double lateralInPerTick = 0.0015701630938037441;
-        public double trackWidthTicks = 6481.11958239478;
-
+        public double inPerTick = 0.0024465982873812;
+        public double lateralInPerTick = 0.0017753210059733874;
+        public double trackWidthTicks = 6675.620370887354;
         // feedforward parameters (in tick units)
-        public double kS = 1.6612848127158713;
-        public double kV = 0.0002791754795388399;
-        public double kA = 0.0000275;
-
+        public double kS = 1.6192735074280513;
+        public double kV = 0.0002862215282173928;
+        public double kA = 0.00004;
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
         public double minProfileAccel = -30;
         public double maxProfileAccel = 50;
-
         // turn profile parameters (in radians)
         public double maxAngVel = Math.PI; // shared with path
         public double maxAngAccel = Math.PI;
-
         // path controller gains
-        public double axialGain = 7.5;
-        public double lateralGain = 6;
-        public double headingGain = 8; // shared with turn
+        public double axialGain = 15;
+        public double lateralGain = 5;
+        public double headingGain = 20; // shared with turn
+
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
@@ -503,5 +500,9 @@ public final class MecanumDrive {
                 defaultTurnConstraints,
                 defaultVelConstraint, defaultAccelConstraint
         );
+    }
+
+    public void update() {
+        updatePoseEstimate();
     }
 }

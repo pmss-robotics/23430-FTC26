@@ -14,10 +14,10 @@ public class KickerSubsystem extends SubsystemBase {
     ServoImplEx servoR;
 
     //TODO: test HOME_POSITION & TARGET_POSITION values
-    private final double HOME_POSITION_RIGHT = 0.0;
-    private final double TARGET_POSITION_RIGHT = 0.07;
-    private final double HOME_POSITION_LEFT = 1;
-    private final double TARGET_POSITION_LEFT = 0.93;
+    private final double HOME_POSITION_RIGHT = 0.25;
+    private final double TARGET_POSITION_RIGHT = 0.0;
+    private final double HOME_POSITION_LEFT = 0.95;
+    private final double TARGET_POSITION_LEFT = 1;
 
     public KickerSubsystem(HardwareMap hardwareMap, Telemetry telemetry){
         this.telemetry = telemetry;

@@ -61,4 +61,10 @@ public class DriveSubsystem extends SubsystemBase {
     public Pose2d getPose() {
         return drive.localizer.getPose();
     }
+
+    @Override
+    public void periodic() {
+        // Road Runner needs this every loop to follow trajectories
+        drive.update();
+    }
 }
