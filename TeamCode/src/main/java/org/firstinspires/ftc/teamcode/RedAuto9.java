@@ -1,3 +1,5 @@
+//RED AUTO FILE
+
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
