@@ -185,7 +185,9 @@ public class RedAuto9 extends CommandOpMode {
                                 new InstantCommand(() -> outtake.setPower(0.0), outtake),
                                 new InstantCommand(() -> belt.setPower(0.0), belt),
                                 new InstantCommand(() -> intake.setPower(0.0), intake)
-                        )
+                        ),
+
+                        new InstantCommand(() -> blackboard.put(End_Pos, drive.getPose()))
                         /*
 
                         //drive to the third row to prepare for intaking

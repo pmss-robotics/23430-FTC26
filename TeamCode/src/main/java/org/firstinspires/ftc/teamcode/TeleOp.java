@@ -2,6 +2,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.RedAuto9.End_Pos;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -18,6 +20,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.drive.Drawing;
+import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.BeltSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.FlywheelSubsystem;
@@ -61,7 +64,7 @@ public class TeleOp extends CommandOpMode {
         tools = new GamepadEx(gamepad2);
 
         // The driveSubsystem wraps Roadrunner's MecanumDrive to combine with Commands.
-        //drive = new DriveSubsystem(new MecanumDrive(hardwareMap, (Pose2d) blackboard.getOrDefault(End_Pos, new Pose2d(0,0,0))), telemetry);
+        drive = new DriveSubsystem(new MecanumDrive(hardwareMap, (Pose2d) blackboard.getOrDefault(End_Pos, new Pose2d(0,0,0))), telemetry);
 
         // The driveCommand uses methods defined in the DriveSubsystem to create behaviour.
         // we're passing in methods to get values instead of straight values because it avoids
@@ -76,8 +79,6 @@ public class TeleOp extends CommandOpMode {
                 () -> driver.getLeftY()*driveSpeed,
                 () -> -driver.getRightX()*driveSpeed,
                 true);
-
-        schedule(driveCommand);
 
         //DRIVER BUTTONS
         //slower driving
@@ -173,11 +174,11 @@ public class TeleOp extends CommandOpMode {
             telemetry.addData("heading (deg)", Math.toDegrees(pose.heading.toDouble()));
             telemetry.update();
 
-
             packet.fieldOverlay().setStroke("#3F51B5");
             Drawing.drawRobot(packet.fieldOverlay(), pose);
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }));
+        schedule(driveCommand);
     }
 
 }
