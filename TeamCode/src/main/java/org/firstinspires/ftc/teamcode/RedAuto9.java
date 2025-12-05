@@ -35,19 +35,19 @@ public class RedAuto9 extends CommandOpMode {
         IntakeSubsystemNew intake = new IntakeSubsystemNew(hardwareMap, telemetry);
         KickerSubsystem kicker = new KickerSubsystem(hardwareMap, telemetry);
 
-        double outtakeVal = 0.54;
+        double outtakeVal = 0.58;
 
-        Pose2d start = new Pose2d(58.4, 54.8, Math.toRadians(37.8));
-        Pose2d shootPoint = new Pose2d(22.3, 15.5, Math.toRadians(39)); //go to shoot pos
-        Pose2d point3 = new Pose2d(30.5, 3.0, 0); //go to start of first row
-        Pose2d point4 = new Pose2d(51, 3.0, 0); //go to end of first row
-        Pose2d point5 = new Pose2d(22.3, 15.5, Math.toRadians(39)); //go to shoot pos
-        Pose2d point6 = new Pose2d(30.5, -27, 0); //go to start of second row
-        Pose2d point7 = new Pose2d(51, -27, 0); //go to end of second row
-        Pose2d point8 = new Pose2d(22.3, 15.5, Math.toRadians(39)); //go to shoot pos
+        Pose2d start = new Pose2d(41.8, 47.5, Math.toRadians(37.8));
+        Pose2d shootPoint = new Pose2d(9.78, 14.6, Math.toRadians(39)); //go to shoot pos
+        Pose2d point3 = new Pose2d(19.78, 4, 0); //go to start of first row
+        Pose2d point4 = new Pose2d(46, 4, 0); //go to end of first row
+        Pose2d point5 = new Pose2d(9.78, 14.6, Math.toRadians(39)); //go to shoot pos
+        Pose2d point6 = new Pose2d(19.78, -19.22, 0); //go to start of second row
+        Pose2d point7 = new Pose2d(51, -19.22, 0); //go to end of second row
+        Pose2d point8 = new Pose2d(19.78, 4, Math.toRadians(48)); //go to shoot pos
         Pose2d point9 = new Pose2d(51, -55.8, 0); //go to start of third row
         Pose2d point10 = new Pose2d(22.3, -55.8, 0); //go to end of third row
-        Pose2d point11 = new Pose2d(22.3, 15.5, Math.toRadians(39)); //go to shoot pos
+        Pose2d point11 = new Pose2d(22.3, 15.5, Math.toRadians(40)); //go to shoot pos
 
         DriveSubsystem drive = new DriveSubsystem(new MecanumDrive(hardwareMap, start), telemetry);
 
@@ -107,7 +107,7 @@ public class RedAuto9 extends CommandOpMode {
                         ),
 
                         //turn on belt & intake to shoot
-                        new InstantCommand(() -> belt.setPower(0.7), belt),
+                        new InstantCommand(() -> belt.setPower(1.0), belt),
                         new WaitCommand(1000),
                         new InstantCommand(() -> intake.setPower(1.0)),
                         new WaitCommand(2000),
@@ -120,11 +120,12 @@ public class RedAuto9 extends CommandOpMode {
                                 new InstantCommand(() -> intake.setPower(0.0), intake)
                         ),
 
+                        new WaitCommand(2000),
                         //drive to point 3 and turn on subsystems to get ready for intaking
                         new ParallelCommandGroup(
                                 new ActionCommand(drive, driveTopoint3),
-                                new InstantCommand(() -> belt.setPower(0.5), belt),
-                                new InstantCommand(() -> intake.setPower(1), intake)
+                                new InstantCommand(() -> belt.setPower(0.6), belt),
+                                new InstantCommand(() -> intake.setPower(0.7), intake)
                         ),
 
                         //drive to point 4 with subsystems on to intake
@@ -158,8 +159,10 @@ public class RedAuto9 extends CommandOpMode {
                         new ParallelCommandGroup(
                                 new ActionCommand(drive, driveTopoint6),
                                 new InstantCommand(() -> belt.setPower(0.5), belt),
-                                new InstantCommand(() -> intake.setPower(1), intake)
+                                new InstantCommand(() -> intake.setPower(0.7), intake)
                         ),
+
+                        new WaitCommand(2000),
                         //drive forwards to intake balls
                         new ActionCommand(drive, driveTopoint7),
 
