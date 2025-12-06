@@ -129,7 +129,7 @@ public class TeleOp extends CommandOpMode {
 
         //set outtake to 2500 rpm (close shot)
         new GamepadButton(tools, GamepadKeys.Button.DPAD_UP).toggleWhenPressed(
-                new InstantCommand(() -> outtake.setVelocityRpm(3000), outtake),
+                new InstantCommand(() -> outtake.setVelocityRpm(2900), outtake),
                 new InstantCommand(() -> outtake.setVelocityRpm(0), outtake)
         );
 
@@ -141,7 +141,7 @@ public class TeleOp extends CommandOpMode {
 
         //set outtake speed to 4200 rpm
         new GamepadButton(tools, GamepadKeys.Button.DPAD_RIGHT).toggleWhenPressed(
-                new InstantCommand(() -> outtake.setVelocityRpm(3700), outtake),
+                new InstantCommand(() -> outtake.setVelocityRpm(3400), outtake),
                 new InstantCommand(() -> outtake.setPower(0.0), outtake)
         );
 

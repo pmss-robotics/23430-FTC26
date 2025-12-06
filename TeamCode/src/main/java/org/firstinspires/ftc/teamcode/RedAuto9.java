@@ -35,7 +35,7 @@ public class RedAuto9 extends CommandOpMode {
         IntakeSubsystemNew intake = new IntakeSubsystemNew(hardwareMap, telemetry);
         KickerSubsystem kicker = new KickerSubsystem(hardwareMap, telemetry);
 
-        double outtakeVal = 0.58;
+        double outtakeVal = 0.55;
 
         Pose2d start = new Pose2d(41.8, 47.5, Math.toRadians(37.8));
         Pose2d shootPoint = new Pose2d(9.78, 14.6, Math.toRadians(39)); //go to shoot pos
@@ -125,7 +125,7 @@ public class RedAuto9 extends CommandOpMode {
                         new ParallelCommandGroup(
                                 new ActionCommand(drive, driveTopoint3),
                                 new InstantCommand(() -> belt.setPower(0.6), belt),
-                                new InstantCommand(() -> intake.setPower(0.7), intake)
+                                new InstantCommand(() -> intake.setPower(0.5), intake)
                         ),
 
                         //drive to point 4 with subsystems on to intake

@@ -35,16 +35,16 @@ public class BlueAuto6 extends CommandOpMode {
         IntakeSubsystemNew intake = new IntakeSubsystemNew(hardwareMap, telemetry);
         KickerSubsystem kicker = new KickerSubsystem(hardwareMap, telemetry);
 
-        double outtakeVal = 0.58;
+        double outtakeVal = 0.54;
 
         Pose2d start = new Pose2d(35.38, -44, Math.toRadians(-40)); //start pos
         Pose2d shootPoint = new Pose2d(15, -10, Math.toRadians(-40)); //go to shoot pos
-        Pose2d point3 = new Pose2d(19, -1, 0); //go to start of first row
-        Pose2d point4 = new Pose2d(46, -1, 0); //go to end of first row
+        Pose2d point3 = new Pose2d(19, 0, 0); //go to start of first row
+        Pose2d point4 = new Pose2d(46, 0, 0); //go to end of first row
         Pose2d point5 = new Pose2d(15, -10, Math.toRadians(-40)); //go to shoot pos
-        Pose2d point6 = new Pose2d(14, 22, 0); //go to start of second row
-        Pose2d point7 = new Pose2d(50, 22, 0); //go to end of second row
-        Pose2d point8 = new Pose2d(19, -3, Math.toRadians(-40)); //go to shoot pos
+        Pose2d point6 = new Pose2d(14, 23, 0); //go to start of second row
+        Pose2d point7 = new Pose2d(50, 23, 0); //go to end of second row
+        Pose2d point8 = new Pose2d(19, -3, Math.toRadians(-42)); //go to shoot pos
 
         DriveSubsystem drive = new DriveSubsystem(new MecanumDrive(hardwareMap, start), telemetry);
 
@@ -108,7 +108,7 @@ public class BlueAuto6 extends CommandOpMode {
                         new ParallelCommandGroup(
                                 new ActionCommand(drive, driveTopoint3),
                                 new InstantCommand(() -> belt.setPower(0.6), belt),
-                                new InstantCommand(() -> intake.setPower(0.7), intake)
+                                new InstantCommand(() -> intake.setPower(0.5), intake)
                         ),
 
                         //drive to point 4 with subsystems on to intake
