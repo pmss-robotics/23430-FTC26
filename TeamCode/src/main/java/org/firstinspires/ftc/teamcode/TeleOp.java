@@ -1,8 +1,4 @@
-//UPDATED TELEOP FILE
-
 package org.firstinspires.ftc.teamcode;
-
-import static org.firstinspires.ftc.teamcode.RedAuto9.End_Pos;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -21,36 +17,30 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.drive.Drawing;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.BeltSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.FlywheelSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystemNew;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.KickerSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
-import org.firstinspires.ftc.teamcode.util.States;
-
+import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "TeleOp")
 public class TeleOp extends CommandOpMode {
-    // probably need to change later.
-    public static double servoIncrement = 7;
-    public static double servoSpeed = 1;
+
     public static double driveSpeed = 1;
     public static double fast = 1;
     public static double slow = 0.5;
 
-    States.Global currentState = States.Global.home; //don't need this?
-
+    //define controllers
     GamepadEx driver, tools;
     DriveSubsystem drive;
 
-    VisionSubsystem vision;
     @Override
-    public void initialize() {
+    public void initialize(){
+        //initialize subsystems
         FlywheelSubsystem outtake = new FlywheelSubsystem(hardwareMap, telemetry);
-        BeltSubsystem belt = new BeltSubsystem(hardwareMap, telemetry);
-        IntakeSubsystemNew intake = new IntakeSubsystemNew(hardwareMap, telemetry);
+        TransferSubsystem belt = new TransferSubsystem(hardwareMap, telemetry);
+        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, telemetry);
         KickerSubsystem kicker = new KickerSubsystem(hardwareMap, telemetry);
 
         // data sent to telemetry shows up on dashboard and driverGamepad station
@@ -63,14 +53,7 @@ public class TeleOp extends CommandOpMode {
         driver = new GamepadEx(gamepad1);
         tools = new GamepadEx(gamepad2);
 
-        // The driveSubsystem wraps Roadrunner's MecanumDrive to combine with Commands.
-        drive = new DriveSubsystem(new MecanumDrive(hardwareMap, (Pose2d) blackboard.getOrDefault(End_Pos, new Pose2d(0,0,0))), telemetry);
-
-        // The driveCommand uses methods defined in the DriveSubsystem to create behaviour.
-        // we're passing in methods to get values instead of straight values because it avoids
-        // disturbing the structure of the CommandOpMode. The aim is to define bindings in this
-        // initialize() method through Commands and these will be looped and acted in the (hidden)
-        // run() loop.
+        drive = new DriveSubsystem(new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0)), telemetry);
 
         driveSpeed = fast;
 
@@ -80,14 +63,21 @@ public class TeleOp extends CommandOpMode {
                 () -> -driver.getRightX()*driveSpeed,
                 true);
 
-        //DRIVER BUTTONS
-        //slower driving
+        //DRIVER BUTTONS!!
+
+        //adjust driveSpeed
         new GamepadButton(driver, GamepadKeys.Button.B).toggleWhenPressed(
                 () -> driveSpeed = slow,
                 () -> driveSpeed = fast
         );
 
-        //TOOLS BUTTONS
+        //reset position & heading
+        new GamepadButton(driver, GamepadKeys.Button.X).whenPressed(
+                () -> drive.drive.localizer.setPose(new Pose2d(0,0,0))
+        );
+
+        //TOOLS BUTTONS!!
+
         //reverse intake & transfer direction
         new GamepadButton(tools, GamepadKeys.Button.A)
                 .whileHeld(new RunCommand(() -> intake.setPower(1), intake))
@@ -145,27 +135,7 @@ public class TeleOp extends CommandOpMode {
                 new InstantCommand(() -> outtake.setPower(0.0), outtake)
         );
 
-        // Driver can snap to locations
-/*
-        new GamepadButton(driver, GamepadKeys.Button.DPAD_LEFT).whenPressed(
-                new InstantCommand(() -> Actions.schedule(driveToShootPos))
-        );
-
-
-
-        Pose2d shootPoint = new Pose2d(22.3, 15.5, Math.toRadians(45));
-        Action driveToShootPos = drive.actionBuilder(drive.getPose())
-                .splineToLinearHeading(shootPoint, 0)
-                .build();
-
-        new GamepadButton(tools, GamepadKeys.Button.DPAD_DOWN).whenPressed(
-                new ActionCommand(drive, driveToShootPos)
-                        .andThen(new InstantCommand(() -> schedule(driveCommand)))
-        );
-
- */
-
-
+        //schedule all commands here!
         schedule(new RunCommand(() -> {
             TelemetryPacket packet = new TelemetryPacket();
             Pose2d pose = drive.getPose();
@@ -179,6 +149,7 @@ public class TeleOp extends CommandOpMode {
             FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }));
         schedule(driveCommand);
+
     }
 
 }
