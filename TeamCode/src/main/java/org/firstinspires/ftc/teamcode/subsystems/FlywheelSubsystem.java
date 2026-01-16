@@ -14,11 +14,9 @@ public class FlywheelSubsystem extends SubsystemBase {
     private final DcMotorEx outtakeMotor;
 
     // PIDF coefficients
-    private static final double kP = 29.0, kI = 0.0, kD = 0.2;
+    private static final double kP = 29.0, kI = 0.0, kD = 0.0, kF = 14.0;
     private static final double TICKS_PER_REV = 28.0;
     private static final double MAX_RPM = 6000.0;
-    //private static final double kF = 32767.0 / ((MAX_RPM * TICKS_PER_REV) / 60.0);
-    private static final double kF = 14.0;
 
     private double targetRpm = 0.0;
 

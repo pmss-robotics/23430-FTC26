@@ -77,20 +77,27 @@ public class TeleOp extends CommandOpMode {
         );
 
         //TOOLS BUTTONS!!
+        //Flywheel:
+        //A: intake
+        //X: turn everything on (toggle)
+        //B: reverse intake & transfer
+        //Y: kicker
+        //Right Bumper: flywheel (auto-get)
 
-        //reverse intake & transfer direction
+        //intake
         new GamepadButton(tools, GamepadKeys.Button.A)
                 .whileHeld(new RunCommand(() -> intake.setPower(1), intake))
                 .whenReleased(new InstantCommand(() -> intake.setPower(0.0))
                 );
 
-        //reverse intake direction
+        //reverse intake & transfer direction
         new GamepadButton(tools, GamepadKeys.Button.B).whileHeld(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> intake.setPower(-0.4)),
                         new InstantCommand(() -> belt.setPower(-0.6))
                 )
         );
+
         // And separately, you can ensure it stops when released:
         new GamepadButton(tools, GamepadKeys.Button.B).whenReleased(
                 new ParallelCommandGroup(
@@ -101,8 +108,13 @@ public class TeleOp extends CommandOpMode {
 
         //turn intake & transfer on
         new GamepadButton(tools, GamepadKeys.Button.X).toggleWhenPressed(
-                new InstantCommand(() -> belt.setPower(0.5), belt),
-                new InstantCommand(() -> belt.setPower(0.0), belt)
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> belt.setPower(1), belt),
+                        new InstantCommand(() -> intake.setPower(1.0), intake)
+                ), new ParallelCommandGroup(
+                        new InstantCommand(() -> belt.setPower(0.0), belt),
+                        new InstantCommand(() -> intake.setPower(0.0), intake)
+                )
         );
 
         //toggle kicker
@@ -142,6 +154,10 @@ public class TeleOp extends CommandOpMode {
             telemetry.addData("x", pose.position.x);
             telemetry.addData("y",pose.position.y);
             telemetry.addData("heading (deg)", Math.toDegrees(pose.heading.toDouble()));
+            telemetry.addLine("----------------------------------");
+            telemetry.addData("SERVO LEFT", kicker.getPositionLeft());
+            telemetry.addData("SERVO RIGHT", kicker.getPositionRight());
+
             telemetry.update();
 
             packet.fieldOverlay().setStroke("#3F51B5");
