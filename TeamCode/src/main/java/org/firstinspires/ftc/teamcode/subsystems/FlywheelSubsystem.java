@@ -14,7 +14,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     private final DcMotorEx outtakeMotor;
 
     // PIDF coefficients
-    private static final double kP = 29.0, kI = 0.0, kD = 0.0, kF = 14.0;
+    private static double kP = 29.0, kI = 0.0, kD = 0.0, kF = 14.0;
     private static final double TICKS_PER_REV = 28.0;
     private static final double MAX_RPM = 6000.0;
 
@@ -37,6 +37,14 @@ public class FlywheelSubsystem extends SubsystemBase {
         targetRpm = rpm;
         double ticksPerSec = (rpm * TICKS_PER_REV) / 60.0;
         outtakeMotor.setVelocity(ticksPerSec);
+    }
+
+    public void setP(int P){
+        this.kP = P;
+    }
+
+    public void setF(int F){
+        this.kF = F;
     }
 
     @Override

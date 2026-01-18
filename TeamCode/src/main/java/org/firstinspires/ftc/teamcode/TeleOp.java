@@ -129,22 +129,36 @@ public class TeleOp extends CommandOpMode {
                 .whenReleased(new InstantCommand(() -> belt.setPower(0.0))
                 );
 
+        //TODO: CHANGE THE setP(x) VALUE!!!
         //set outtake to 2500 rpm (close shot)
         new GamepadButton(tools, GamepadKeys.Button.DPAD_UP).toggleWhenPressed(
-                new InstantCommand(() -> outtake.setVelocityRpm(2900), outtake),
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> outtake.setP(1), outtake), //TODO: CHANGE P VAL
+                        new InstantCommand(() -> outtake.setF(1), outtake), //TODO: CHANGE F VAL
+                        new InstantCommand(() -> outtake.setVelocityRpm(2500), outtake)
+                        ),
                 new InstantCommand(() -> outtake.setVelocityRpm(0), outtake)
         );
 
-        //set outtake to 3000 rpm
+        //set outtake to 2800 rpm
         new GamepadButton(tools, GamepadKeys.Button.DPAD_LEFT).toggleWhenPressed(
-                new InstantCommand(() -> outtake.setVelocityRpm(2800), outtake),
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> outtake.setP(1), outtake), //TODO: CHANGE P VAL
+                        new InstantCommand(() -> outtake.setF(1), outtake), //TODO: CHANGE F VAL
+                        new InstantCommand(() -> outtake.setVelocityRpm(2800), outtake)
+                ),
+
                 new InstantCommand(() -> outtake.setVelocityRpm(0), outtake)
         );
 
-        //set outtake speed to 4200 rpm
+        //set outtake speed to 3400 rpm
         new GamepadButton(tools, GamepadKeys.Button.DPAD_RIGHT).toggleWhenPressed(
-                new InstantCommand(() -> outtake.setVelocityRpm(3400), outtake),
-                new InstantCommand(() -> outtake.setPower(0.0), outtake)
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> outtake.setP(1), outtake), //TODO: CHANGE P VAL
+                        new InstantCommand(() -> outtake.setF(1), outtake), //TODO: CHANGE F VAL
+                        new InstantCommand(() -> outtake.setVelocityRpm(3400), outtake)
+                ),
+                new InstantCommand(() -> outtake.setVelocityRpm(0.0), outtake)
         );
 
         //schedule all commands here!
